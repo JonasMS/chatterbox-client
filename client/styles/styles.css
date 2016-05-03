@@ -88,3 +88,10 @@ form input[type=text] {
     background-color: #0090da;
 }
 
+
+.posts {
+    width: 80%;
+    height: 400px;
+    overflow-y: scroll;
+}
+
