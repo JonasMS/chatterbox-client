@@ -8,10 +8,11 @@ var message = {
 
 var app = {
   server: 'https://api.parse.com/1/classes/messages',
-  posts: {
+  posts: { //TODO: implement a set
     total: 0
   },
-  // init: () => app.fetch(),
+  friends: new Set(),
+  init: () => app.fetch(),
   send: message => {
     $.ajax({
       url: 'https://api.parse.com/1/classes/messages',
@@ -38,6 +39,9 @@ var app = {
       }    
     });
   },
+  updatePosts: () => {
+    app.fetch();   
+  },
   createPost: (postData) => {
     var $framePost = $('<div class="post" ' + app.posts.total + '></div>');
     var $username = $('<div class="username"></div>');
@@ -53,29 +57,54 @@ var app = {
     $text.text(postData.text);
     $time.text(postData.createdAt);
 
+    $username.click(function() {
+      app.addFriend( $(this).html() );
+    });
+
   },
   clearMessages: () => {
     $('#chats').empty();
   },
   addMessage: message => {
     app.send(message);
-    // app.fetch();
+  },
+  addRoom: newRoom => {
+    //create a new room select option
+    let $room = $('<option value="' + newRoom + '"">' + newRoom + '</option');
+    $('#roomSelect').append($room);
+    //append new room to roomSelect list
+  },
+  // == Handlers ==
+  handleSubmit: () => {
+    message.text = $('.chatInput')[0].value;
+    $('.chatInput')[0].value = '';
+    app.send(message);
+  },
+  addFriend: friend => {
+    app.friends.add(friend);
+    _.each($('.username'), function(user) {
+      if (app.friends[user.innerHTML]) {
+        console.log('test');
+        $('.username').css('text-decoration', 'underline');
+      }
+    });
+    //create a friend object
+    //on click of username store name in object
+
   }
 };
 
-$('.submitBtn').click(function() {
-  //change message text to current text
-  message.text = $('.chatInput')[0].value;
-  $('.chatInput')[0].value = '';
-  // //send message
-  app.send(message);
+ 
 
-  // // app.addMessage(message);
-  //fetch new data
 
+// == Events ==
+$('#send').click(function() {
+  app.handleSubmit();
 });
 
-setInterval(() => app.fetch(), 100);  
+
+
+setInterval(() => app.updatePosts(), 500);  
 
 // var message = {
 //   username: '<script>alert("lololol")</script>',

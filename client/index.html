@@ -8,7 +8,7 @@
     <!-- dependencies -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.6.15/browser.js"></script>
     <script src="bower_components/jquery/dist/jquery.js"></script>
-    <!-- <script src="bower_components/underscore/underscore-min.js"></script> -->
+    <script src="bower_components/underscore/underscore-min.js"></script>
     <!-- your scripts -->
     <script src="env/config.js"></script>
   </head>
@@ -22,15 +22,19 @@
           <button class='submitBtn'>Submit</button>
         </div> -->
         <!-- Your HTML goes here! -->
-      </div>
       <div id="chats"></div>
+      </div>
       <form>
-        <div class="roomFrame">
-        </div>
-
         <div class="inputFrame">
           <textarea class="chatInput"></textarea>
-          <button class="submitBtn" type="button"> > </button>
+          <button id="send" type="button"> > </button>
+        </div>
+
+        <div class="roomFrame">
+          <select id="roomSelect" name="select">
+            <option value="lobby">Lobby</option>
+            <option value="4chan">4Chan</option>
+          </select>
         </div>
       </form>
     </div> <!-- end container -->
