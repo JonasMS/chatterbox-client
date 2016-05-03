@@ -89,7 +89,7 @@ form input[type=text] {
 }
 
 
-.posts {
+#chats {
     width: 80%;
     height: 400px;
     overflow-y: scroll;

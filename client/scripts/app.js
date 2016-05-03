@@ -1,60 +1,79 @@
 // var $posts = $('.posts')[0];
 // var $input = $('.chatInput')[0];
-
-var app = {
-  server: "https://api.parse.com/1/classes/messages",
-  message: {
-  username: 'Mel Brooks',
+var message = {
+  username: 'bobafet',
   text: 'It\'s good to be the king',
   roomname: 'lobby'
-  },
+};
+
+var app = {
+  server: 'https://api.parse.com/1/classes/messages',
   posts: {
     total: 0
   },
-  init: () => app.fetch(),
-  send: () => {
+  // init: () => app.fetch(),
+  send: message => {
     $.ajax({
-      url: app.server,
+      url: 'https://api.parse.com/1/classes/messages',
       type: 'POST',
       data: JSON.stringify(message),
       contentType: 'application/json',
-      success: (data) => {
-        console.log('chatterbox: Message sent');
+      success: data => {
+        console.log('data successfully sent: ', data);
       },
-      error: () => {
+      error: data => {
         console.error('chatterbox: Failed to send message', data);
       }
     });
   },
   fetch: () => {
-    $.get(app.server, {}, (data) => {
+    $.get(app.server, {}, data => {
       for (let post of data.results) {
         var encodedId = (post.objectId);
-        if (app.posts.total[encodedId] === undefined) {
+        if (app.posts[encodedId] === undefined) {
           app.posts.total++;
-          app.posts.total[encodedId] = true; 
+          app.posts[encodedId] = true; 
           app.createPost(post);
         }
       }    
     });
   },
   createPost: (postData) => {
-  var $framePost = $('<div class= "post" ' + app.posts.total + '></div>');
-  var $username = $('<div class="username"></div>');
-  var $text = $('<div class="text"></div>');
-  var $time = $('<div class="time"></div');
+    var $framePost = $('<div class="post" ' + app.posts.total + '></div>');
+    var $username = $('<div class="username"></div>');
+    var $text = $('<div class="text"></div>');
+    var $time = $('<div class="time"></div');
 
-  $framePost.append($username);
-  $framePost.append($text);
-  $framePost.append($time);
-  $('.posts').append($framePost);
+    $framePost.append($username);
+    $framePost.append($text);
+    $framePost.append($time);
+    $('#chats').append($framePost);
 
-  $username.text(postData.username);
-  $text.text(postData.text);
-  $time.text(postData.createdAt);
+    $username.text(postData.username);
+    $text.text(postData.text);
+    $time.text(postData.createdAt);
 
   },
+  clearMessages: () => {
+    $('#chats').empty();
+  },
+  addMessage: message => {
+    app.send(message);
+    // app.fetch();
+  }
 };
+
+$('.submitBtn').click(function() {
+  //change message text to current text
+  message.text = $('.chatInput')[0].value;
+  $('.chatInput')[0].value = '';
+  // //send message
+  app.send(message);
+
+  // // app.addMessage(message);
+  //fetch new data
+
+});
 
 setInterval(() => app.fetch(), 100);  
 

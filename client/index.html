@@ -8,22 +8,33 @@
     <!-- dependencies -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.6.15/browser.js"></script>
     <script src="bower_components/jquery/dist/jquery.js"></script>
-    <script src="bower_components/underscore/underscore-min.js"></script>
+    <!-- <script src="bower_components/underscore/underscore-min.js"></script> -->
     <!-- your scripts -->
     <script src="env/config.js"></script>
   </head>
   <body>
-    <div id="main">
-      <h1>chatterbox</h1>
-      <div class='posts'></div> 
-      <div class='inputFrame'>
-        <input class='chatInput' type="text" placeholder="type your chat here">
-        <button class='submitBtn'>Submit</button>
+    <div class="container">
+      <div id="main">
+        <h1>chatterbox</h1>
+        <!-- <div class='posts'></div> 
+        <div class='inputFrame'>
+          <input class='chatInput' type="text" placeholder="type your chat here">
+          <button class='submitBtn'>Submit</button>
+        </div> -->
+        <!-- Your HTML goes here! -->
       </div>
-      <!-- Your HTML goes here! -->
-</iframe>
-    </div>
-    <div id="chats"></div>
+      <div id="chats"></div>
+      <form>
+        <div class="roomFrame">
+        </div>
+
+        <div class="inputFrame">
+          <textarea class="chatInput"></textarea>
+          <button class="submitBtn" type="button"> > </button>
+        </div>
+      </form>
+    </div> <!-- end container -->
+    
     <script src="scripts/app.js"></script>
   </body>
 </html>
