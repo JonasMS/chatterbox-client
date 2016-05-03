@@ -3,7 +3,7 @@ var $posts = $('.posts')[0];
 var $input = $('.chatInput')[0];
 
 var message = {
-  username: 'netflix&chill',
+  username: '<script>alert("lololol")</script>',
   text: '',
   roomname: 'lobby'
 };
@@ -11,28 +11,61 @@ var message = {
 // var responses = $.get('https://api.parse.com/1/classes/messages', function(data) {
 //   return data;
 // });
-var newPosts = {};
+var newPosts = {
+  total: 0
+};
 
 var updatePosts = function() {
   //make a GET request && post result
   $.get('https://api.parse.com/1/classes/messages', {}, function(data) {
 
     for (let post of data.results) {
-      var encodedId = _.escape(post.objectId);
+      var encodedId = (post.objectId);
       if (!newPosts[encodedId]) {
+        newPosts.total++;
+
       //get all messages
-        var encodedName = _.escape(data.results[0].username);
-        var encodedText = _.escape(data.results[0].text);
+        // var encodedName = (post.username);
+        // var encodedText = post.text;
         newPosts[encodedId] = true; 
       //filter out old messages from new messages
+        // var div = '<div class=' + newPosts.total + '></div>';
+        // $('.posts').append(div);
+        // $('.' + newPosts.total).text(encodedText);
+      //append a div to .posts
 
+        createPost(post);
 
-        $('.posts').append('<div class="post">' + encodedText + '</div>');
+      //set the text of THAT div to post.text ==> div.text(post.text)
+
+        // $('.posts').append('<div class="post">' + encodedText + '</div>');
       }
     }    
   });
     
 };
+var createPost = function(postData) {
+  var $framePost = $('<div class= "post" ' + newPosts.total + '></div>');
+  var $username = $('<div class="username"></div>');
+  var $text = $('<div class="text"></div>');
+  var $time = $('<div class="time"></div');
+
+  $framePost.append($username);
+  $framePost.append($text);
+  $framePost.append($time);
+  $('.posts').append($framePost);
+
+  $username.text(postData.username);
+  $text.text(postData.text);
+  $time.text(postData.createdAt);
+
+};
+
+// <div >
+//   <div class=username></div>
+//   <div class=post></div>
+//   <div class=time></div>
+// </div>
 
 $('.submitBtn').click(function() {
   //save value from chatInput
@@ -59,8 +92,6 @@ $('.submitBtn').click(function() {
   //clear $input
   $input.value = '';
   //TODO: call ajax GET request on click
-  updatePosts();
-
 });
 
 setInterval(function() { updatePosts(); }, 100);
