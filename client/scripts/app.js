@@ -2,6 +2,48 @@
 var $posts = $('.posts')[0];
 var $input = $('.chatInput')[0];
 
+var app = {
+  message: {
+    username: 'Mel Brooks',
+    text: 'It\'s good to be the king',
+    roomname: 'lobby'
+  },
+  posts: {
+    total: 0
+  },
+  init: () => updatePosts(),
+  send: () => {
+    $.ajax({
+    // This is the url you should use to communicate with the parse API server.
+      url: 'https://api.parse.com/1/classes/messages',
+      type: 'POST',
+      data: JSON.stringify(this.message),
+      contentType: 'application/json',
+      success: function (data) {
+        console.log('chatterbox: Message sent');
+      },
+      error: function (data) {
+        // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
+        console.error('chatterbox: Failed to send message', data);
+      }
+    });
+  },
+  fetch: function() {
+  //make a GET request && post result
+    $.get('https://api.parse.com/1/classes/messages', {}, data => {
+
+      for (let post of data.results) {
+        var encodedId = (post.objectId);
+        if (!newPosts[encodedId]) {
+          newPosts.total++;
+          newPosts[encodedId] = true; 
+          createPost(post);
+        }
+      }    
+    });
+  }
+};
+
 var message = {
   username: '<script>alert("lololol")</script>',
   text: '',
@@ -23,22 +65,8 @@ var updatePosts = function() {
       var encodedId = (post.objectId);
       if (!newPosts[encodedId]) {
         newPosts.total++;
-
-      //get all messages
-        // var encodedName = (post.username);
-        // var encodedText = post.text;
         newPosts[encodedId] = true; 
-      //filter out old messages from new messages
-        // var div = '<div class=' + newPosts.total + '></div>';
-        // $('.posts').append(div);
-        // $('.' + newPosts.total).text(encodedText);
-      //append a div to .posts
-
         createPost(post);
-
-      //set the text of THAT div to post.text ==> div.text(post.text)
-
-        // $('.posts').append('<div class="post">' + encodedText + '</div>');
       }
     }    
   });
